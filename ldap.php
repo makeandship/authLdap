@@ -245,6 +245,47 @@ class LDAP
         }
         return false;
     }
+	
+    /**
+     * This method registers the user to the ldap server
+     *
+     * @param hash $data
+     * @return boolean true or false depending on successfull registration or not
+     */
+	public function register($data, $filter = '(uid=%s)'){
+		$dn = $dn = "uid=".$data->user_login.",".$this->_baseDn;
+		$ds = ldap_connect($this->_server);
+		if ($ds) {
+		    ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3); // IMPORTANT
+		    $result = ldap_bind($ds, $this->_username, $this->_password); //BIND
+		    $ldaprecord['objectclass'][0] = "top";
+		    $ldaprecord['objectclass'][1] = "account";
+		    $ldaprecord['objectclass'][2] = "posixAccount";
+			$ldaprecord['objectclass'][3] = "shadowAccount";
+		    $ldaprecord['cn'] = $data->user_login;;
+			$ldaprecord['uid'] = $data->user_login;;
+			$ldaprecord['uidNumber'] = '16859';
+			$ldaprecord['gidNumber'] = '100';
+			$ldaprecord['homeDirectory'] = '/home/'.$data->user_login; 
+			$ldaprecord['loginShell'] = '/bin/bash';
+			$ldaprecord['gecos'] = $data->user_login;
+			$ldaprecord['userPassword'] = $data->user_pass;
+			$ldaprecord['shadowLastChange'] = '0';
+		    $ldaprecord['shadowWarning'] = '0'; 
+		    $ldaprecord['shadowMax'] = '0';
+
+		    $added = @ldap_add($ds, $dn, $ldaprecord);
+			
+			if (!$added) {
+			     authLdap_debug("Cannot add user " . $data->user_login . " to LDAP server");
+			     return false;
+			}
+   
+		} else {
+		    error_log("cannot connect to LDAP server at $this->_server.");
+		}
+	}
+	
     /**
      * $this method loggs errors if debugging is set to ON
      */

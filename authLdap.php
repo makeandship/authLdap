@@ -770,7 +770,21 @@ function authLdap_send_change_email($result, $user, $newUserData)
     return $result;
 }
 
+function authLdap_register($user_id) {
+	$authLDAPFilter = authLdap_get_option('Filter');
+	$data = get_userdata($user_id);
+    try {
+        authLdap_debug('about to do LDAP registration');
+        $result = authLdap_get_server()->Register($data, $authLDAPFilter);
+    } catch (Exception $e) {
+        authLdap_debug('LDAP registration failed with exception: ' . $e->getMessage());
+        return false;
+    }
+	return $result;
+}
+
 add_action('admin_menu', 'authLdap_addmenu');
+add_action('user_register', 'authLdap_register');
 add_filter('show_password_fields', 'authLdap_show_password_fields', 10, 2);
 add_filter('allow_password_reset', 'authLdap_allow_password_reset', 10, 2);
 add_filter('authenticate', 'authLdap_login', 10, 3);
