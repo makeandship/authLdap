@@ -259,20 +259,15 @@ class LDAP
 		    ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3); // IMPORTANT
 		    $result = ldap_bind($ds, $this->_username, $this->_password); //BIND
 		    $ldaprecord['objectclass'][0] = "top";
-		    $ldaprecord['objectclass'][1] = "account";
-		    $ldaprecord['objectclass'][2] = "posixAccount";
-			$ldaprecord['objectclass'][3] = "shadowAccount";
-		    $ldaprecord['cn'] = $data->user_login;;
-			$ldaprecord['uid'] = $data->user_login;;
-			$ldaprecord['uidNumber'] = '16859';
-			$ldaprecord['gidNumber'] = '100';
-			$ldaprecord['homeDirectory'] = '/home/'.$data->user_login; 
-			$ldaprecord['loginShell'] = '/bin/bash';
-			$ldaprecord['gecos'] = $data->user_login;
+		    $ldaprecord['objectclass'][1] = "person";
+		    $ldaprecord['objectclass'][2] = "organizationalPerson";
+			$ldaprecord['objectclass'][3] = "inetOrgPerson";
+		    $ldaprecord['cn'] = $data->user_login;
+			$ldaprecord['uid'] = $data->user_login;
+			$ldaprecord['mail'] = $data->user_email;
+			$ldaprecord['sn'] = $data->user_login;
+			$ldaprecord['employeeNumber'] = md5(uniqid($data->user_login, true));
 			$ldaprecord['userPassword'] = $data->user_pass;
-			$ldaprecord['shadowLastChange'] = '0';
-		    $ldaprecord['shadowWarning'] = '0'; 
-		    $ldaprecord['shadowMax'] = '0';
 
 		    $added = @ldap_add($ds, $dn, $ldaprecord);
 			
