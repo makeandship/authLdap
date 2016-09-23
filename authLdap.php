@@ -50,6 +50,8 @@ function authLdap_options_panel()
             'Groups'        => authLdap_get_post('authLDAPGroups', array()),
             'GroupSeparator'=> authLdap_get_post('authLDAPGroupSeparator', ','),
             'Debug'         => authLdap_get_post('authLDAPDebug', false),
+			'CanSignup'     => authLdap_get_post('authLDAPCanSignup', false),
+			'CanResetPassword'     => authLdap_get_post('authLDAPCanResetPassword', false),
             'GroupAttr'     => authLdap_get_post('authLDAPGroupAttr'),
             'GroupFilter'   => authLdap_get_post('authLDAPGroupFilter'),
             'DefaultRole'   => authLdap_get_post('authLDAPDefaultRole'),
@@ -77,6 +79,8 @@ function authLdap_options_panel()
     $authLDAPGroups        = authLdap_get_option('Groups');
     $authLDAPGroupSeparator= authLdap_get_option('GroupSeparator');
     $authLDAPDebug         = authLdap_get_option('Debug');
+	$authCanSignup         = authLdap_get_option('CanSignup');
+	$authCanResetPassword  = authLdap_get_option('CanResetPassword');
     $authLDAPGroupAttr     = authLdap_get_option('GroupAttr');
     $authLDAPGroupFilter   = authLdap_get_option('GroupFilter');
     $authLDAPDefaultRole   = authLdap_get_option('DefaultRole');
@@ -85,6 +89,8 @@ function authLdap_options_panel()
 
     $tChecked              = ($authLDAP)               ? ' checked="checked"' : '';
     $tDebugChecked         = ($authLDAPDebug)          ? ' checked="checked"' : '';
+	$tCanSignup            = ($authCanSignup)          ? ' checked="checked"' : '';
+	$tResetPassword        = ($authCanResetPassword)          ? ' checked="checked"' : '';
     $tPWChecked            = ($authLDAPCachePW)        ? ' checked="checked"' : '';
     $tGroupChecked         = ($authLDAPGroupEnable)    ? ' checked="checked"' : '';
     $tGroupOverUserChecked = ($authLDAPGroupOverUser)  ? ' checked="checked"' : '';
