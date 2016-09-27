@@ -90,7 +90,7 @@ function authLdap_options_panel()
     $tChecked              = ($authLDAP)               ? ' checked="checked"' : '';
     $tDebugChecked         = ($authLDAPDebug)          ? ' checked="checked"' : '';
 	$tCanSignup            = ($authCanSignup)          ? ' checked="checked"' : '';
-	$tResetPassword        = ($authCanResetPassword)          ? ' checked="checked"' : '';
+	$tResetPassword        = ($authCanResetPassword)   ? ' checked="checked"' : '';
     $tPWChecked            = ($authLDAPCachePW)        ? ' checked="checked"' : '';
     $tGroupChecked         = ($authLDAPGroupEnable)    ? ' checked="checked"' : '';
     $tGroupOverUserChecked = ($authLDAPGroupOverUser)  ? ' checked="checked"' : '';

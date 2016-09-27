@@ -267,7 +267,7 @@ class LDAP
 			$ldaprecord['mail'] = $data->user_email;
 			$ldaprecord['sn'] = $data->user_login;
 			$ldaprecord['employeeNumber'] = md5(uniqid($data->user_login, true));
-			$ldaprecord['userPassword'] = $data->user_pass;
+			$ldaprecord['userPassword'] = '{SHA}' . base64_encode(pack('H*',sha1($_POST['pass1'])));
 
 		    $added = @ldap_add($ds, $dn, $ldaprecord);
 			
