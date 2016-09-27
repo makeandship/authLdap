@@ -777,6 +777,12 @@ function authLdap_send_change_email($result, $user, $newUserData)
 }
 
 function authLdap_register($user_id) {
+	$authCanSignup = authLdap_get_option('CanSignup');
+	if (! $authCanSignup){
+		authLdap_debug('LDAP registration is disabled');
+		return true;
+	}
+	
 	$authLDAPFilter = authLdap_get_option('Filter');
 	$data = get_userdata($user_id);
     try {
