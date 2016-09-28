@@ -282,6 +282,33 @@ class LDAP
 	}
 	
     /**
+     * This method reset the user password in the ldap server
+     *
+     * @param hash $data
+     * @return boolean true or false depending on successfull registration or not
+     */
+	public function reset($user, $filter = '(uid=%s)'){
+		$dn = $dn = "uid=".$user->user_login.",".$this->_baseDn;
+		$ds = ldap_connect($this->_server);
+		if ($ds) {
+		    ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3); // IMPORTANT
+		    $result = ldap_bind($ds, $this->_username, $this->_password); //BIND
+			$newEntry = array();
+			$newEntry['userPassword'] = '{SHA}' . base64_encode(pack('H*',sha1($_POST['pass1'])));
+
+		    $changed = ldap_mod_replace($ds, $dn, $newEntry);
+			
+			if (!$changed) {
+			     authLdap_debug("Cannot reset password for " . $user->user_login);
+			     return false;
+			}
+   
+		} else {
+		    error_log("cannot connect to LDAP server at $this->_server.");
+		}
+	}
+	
+    /**
      * $this method loggs errors if debugging is set to ON
      */
     public function logError()

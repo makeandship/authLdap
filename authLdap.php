@@ -583,7 +583,7 @@ function authLdap_allow_password_reset($return, $userid)
     }
 
     if (get_user_meta($userid, 'authLDAP')) {
-        return false;
+        return authLdap_get_option('CanResetPassword');
     }
     return $return;
 }
@@ -795,8 +795,21 @@ function authLdap_register($user_id) {
 	return $result;
 }
 
+function authLdap_reset_password($user) {
+	$authLDAPFilter = authLdap_get_option('Filter');
+    try {
+        authLdap_debug('about to reset LDAP password');
+        $result = authLdap_get_server()->Reset($user, $authLDAPFilter);
+    } catch (Exception $e) {
+        authLdap_debug('LDAP reset password failed with exception: ' . $e->getMessage());
+        return false;
+    }
+	return true;
+}
+
 add_action('admin_menu', 'authLdap_addmenu');
 add_action('user_register', 'authLdap_register');
+add_action('password_reset', 'authLdap_reset_password');
 add_filter('show_password_fields', 'authLdap_show_password_fields', 10, 2);
 add_filter('allow_password_reset', 'authLdap_allow_password_reset', 10, 2);
 add_filter('authenticate', 'authLdap_login', 10, 3);
